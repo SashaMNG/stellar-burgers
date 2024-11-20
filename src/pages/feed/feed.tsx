@@ -21,7 +21,7 @@ export const Feed: FC = () => {
   }, []);
 
   const handleGetFeeds = () => {
-    dispatch(getOrders());
+    dispatch(getOrdersData());
   };
 
   if (ordersLoading) {
