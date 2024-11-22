@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from '../../services/store';
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const dispatch = useDispatch();
-
   const bun = useSelector(getConstructorBun);
   const ingredients = useSelector(getConstructorIngredients);
 

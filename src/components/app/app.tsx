@@ -11,7 +11,13 @@ import {
   ResetPassword
 } from '@pages';
 import { useEffect } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useMatch,
+  useNavigate
+} from 'react-router-dom';
 import '../../index.css';
 import { checkUserAuth } from '../../services';
 import { getIngredients } from '../../services/slices/ingredients';
@@ -24,6 +30,10 @@ const App = () => {
   const location = useLocation();
   const backgroundLocation = location.state?.background;
   const navigate = useNavigate();
+  const feedMatch = useMatch('/feed/:number');
+  const profileOrderMatch = useMatch('/profile/orders/:number');
+  const orderNumber =
+    feedMatch?.params.number || profileOrderMatch?.params.number;
 
   const onClose = () => {
     navigate(-1);
@@ -81,7 +91,7 @@ const App = () => {
             element={
               <Modal
                 children={<OrderInfo />}
-                title='Детали заказа'
+                title={`Заказ #${orderNumber}`}
                 onClose={onClose}
               />
             }
@@ -91,7 +101,7 @@ const App = () => {
             element={
               <Modal
                 children={<OrderInfo />}
-                title='Детали заказа'
+                title={`Заказ #${orderNumber}`}
                 onClose={onClose}
               />
             }

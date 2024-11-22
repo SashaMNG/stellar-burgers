@@ -3,7 +3,6 @@ import { FeedUI } from '@ui-pages';
 import { FC, useEffect } from 'react';
 import {
   getLoadingFeed,
-  getOrders,
   getOrdersData,
   getOrdersFeedSelector
 } from '../../services/slices/feed';
@@ -13,7 +12,6 @@ export const Feed: FC = () => {
   /** TODO: взять переменную из стора */
   const orders = useSelector(getOrdersFeedSelector);
   const ordersLoading = useSelector(getLoadingFeed);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
