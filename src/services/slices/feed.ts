@@ -1,19 +1,14 @@
-import { getFeedsApi, getOrdersApi, TFeedsResponse } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TOrder, TOrdersData } from '@utils-types';
+import { getFeedsApi, TFeedsResponse } from '../../utils/burger-api';
+import { TOrder, TOrdersData } from '../../utils/types';
 
-export const getOrdersData = createAsyncThunk<TFeedsResponse>(
-  'feed/getOrdersData',
+export const getFeeds = createAsyncThunk<TFeedsResponse>(
+  'feed/getFeeds',
   async () => {
     const data = await getFeedsApi();
     return data;
   }
 );
-
-export const getOrders = createAsyncThunk('feed/getOrders', async () => {
-  const data = await getOrdersApi();
-  return data;
-});
 
 type TFeedState = {
   total: TOrdersData | number;
@@ -33,54 +28,40 @@ export const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    setOrders: (state, action: PayloadAction<TOrder[]>): void => {
-      state.orders = action.payload;
-    },
     setTotal: (state, action: PayloadAction<number>): void => {
       state.total = action.payload;
     },
     setTotalToday: (state, action: PayloadAction<number>): void => {
       state.totalToday = action.payload;
+    },
+    setFeed: (state, action: PayloadAction<TOrder[]>): void => {
+      state.orders = action.payload;
     }
   },
   selectors: {
-    getOrdersFeedSelector: (state: TFeedState) => state.orders,
     getLoadingFeed: (state: TFeedState) => state.loadingFeed,
     getTotal: (state: TFeedState) => state.total,
-    getTotalToday: (state: TFeedState) => state.totalToday
+    getTotalToday: (state: TFeedState) => state.totalToday,
+    getFeed: (state: TFeedState) => state.orders
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(getOrdersData.pending, (state) => {
+      .addCase(getFeeds.pending, (state) => {
         state.loadingFeed = true;
       })
-      .addCase(getOrdersData.fulfilled, (state, action) => {
+      .addCase(getFeeds.fulfilled, (state, action) => {
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
         state.loadingFeed = false;
       })
-      .addCase(getOrdersData.rejected, (state) => {
-        state.loadingFeed = false;
-      })
-      .addCase(getOrders.pending, (state) => {
-        state.loadingFeed = true;
-      })
-      .addCase(getOrders.fulfilled, (state, action) => {
-        state.orders = action.payload;
-        state.loadingFeed = false;
-      })
-      .addCase(getOrders.rejected, (state) => {
+      .addCase(getFeeds.rejected, (state) => {
         state.loadingFeed = false;
       });
   }
 });
 
-export const { setOrders } = feedSlice.actions;
-export const {
-  getOrdersFeedSelector,
-  getLoadingFeed,
-  getTotal,
-  getTotalToday
-} = feedSlice.selectors;
+export const { setFeed, setTotal, setTotalToday } = feedSlice.actions;
+export const { getLoadingFeed, getTotal, getTotalToday, getFeed } =
+  feedSlice.selectors;

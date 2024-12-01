@@ -1,19 +1,11 @@
-import { getOrderByNumberApi, orderBurgerApi, TNewOrderResponse } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
+import { orderBurgerApi, TNewOrderResponse } from '../../utils/burger-api';
+import { TOrder } from '../../utils/types';
 
 export const orderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
   'order/orderBurger',
   async (ingredients: string[]) => {
     const data = await orderBurgerApi(ingredients);
-    return data;
-  }
-);
-
-export const getOrderByNumber = createAsyncThunk(
-  'order/getOrderByNumber',
-  async (number: number) => {
-    const data = await getOrderByNumberApi(number);
     return data;
   }
 );
@@ -64,20 +56,6 @@ export const orderSlice = createSlice({
         state.orderModalData = action.payload.order; // Сохраняем данные заказа для модалки
       })
       .addCase(orderBurger.rejected, (state, action) => {
-        state.loading = false;
-        state.orderRequest = false;
-      })
-      .addCase(getOrderByNumber.pending, (state) => {
-        state.loading = true;
-        state.orderRequest = true;
-      })
-      .addCase(getOrderByNumber.fulfilled, (state, action) => {
-        state.loading = false;
-        state.order = action.payload.orders[0];
-        state.orderRequest = false;
-        state.orderModalData = action.payload.orders[0];
-      })
-      .addCase(getOrderByNumber.rejected, (state, action) => {
         state.loading = false;
         state.orderRequest = false;
       });

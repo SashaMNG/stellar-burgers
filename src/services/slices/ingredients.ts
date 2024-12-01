@@ -1,6 +1,6 @@
-import { getIngredientsApi } from '@api';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TIngredient } from '@utils-types';
+import { getIngredientsApi } from '../../utils/burger-api';
+import { TIngredient } from '../../utils/types';
 
 export const getIngredients = createAsyncThunk<TIngredient[], void>(
   'ingredients/getIngredients',
